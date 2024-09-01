@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staq API - Criar Cartão Pré-pago</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input, button {
+            margin: 10px 0;
+            padding: 5px;
+        }
+        #resultado {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Criar Cartão Pré-pago</h1>
+    <form id="cartaoForm">
+        <input type="text" id="customer_id" placeholder="ID do Cliente" required>
+        <input type="text" id="nome_titular" placeholder="Nome do Titular" required>
+        <input type="text" id="numero_celular" placeholder="Número de Celular" required>
+        <input type="text" id="codigo_moeda" placeholder="Código da Moeda" value="JOD">
+        <button type="submit">Criar Cartão</button>
+    </form>
+    <div id="resultado"></div>
+
+    <script>
+        document.getElementById('cartaoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = {
+                customer_id: document.getElementById('customer_id').value,
+                nome_titular: document.getElementById('nome_titular').value,
+                numero_celular: document.getElementById('numero_celular').value,
+                codigo_moeda: document.getElementById('codigo_moeda').value
+            };
+
+            try {
+                const response = await fetch('/criar_cartao', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                const result = await response.json();
+                document.getElementById('resultado').innerText = JSON.stringify(result, null, 2);
+            } catch (error) {
+                console.error('Erro:', error);
+                document.getElementById('resultado').innerText = 'Erro ao criar o cartão';
+            }
+        });
+    </script>
+</body>
+</html>
